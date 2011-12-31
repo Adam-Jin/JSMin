@@ -1,8 +1,7 @@
 JSMIN, The JavaScript Minifier
 ==============================
 
-Douglas Crockford
-douglas@crockford.com
+Douglas Crockford <douglas@crockford.com>
 
 JSMin is a filter which removes comments and unnecessary whitespace from
 JavaScript files. It typically reduces filesize by half, resulting in faster
@@ -16,10 +15,10 @@ JSMin is a filter that omits or modifies some characters. This does not
 change the behavior of the program that it is minifying. The result may be
 harder to debug. It will definitely be harder to read.
 
-JSMin first replaces carriage returns ('\r') with linefeeds ('\n'). It
+JSMin first replaces carriage returns (`'\r'`) with linefeeds (`'\n'`). It
 replaces all other control characters (including tab) with spaces. It
-replaces comments in the // form with linefeeds. It replaces comments in
-the /* */ form with spaces. All runs of spaces are replaced with a single
+replaces comments in the `//` form with linefeeds. It replaces comments in
+the `/* */` form with spaces. All runs of spaces are replaced with a single
 space. All runs of linefeeds are replaced with a single linefeed.
 
 It omits spaces except when a space is preceded and followed by a non-ASCII
@@ -93,20 +92,21 @@ Character Set
 -------------
 
 JSMin requires, but does not verify, that the character set encoding of the
-input program is either ASCII or UTF-8. It might not work correctly with other
-encodings.
+input program is either ASCII or UTF-8. It might not work correctly with
+other encodings.
 
 Caution
 -------
 
-Be sure to retain your original source file. JSMin is a one-way trip: Once done,
-it cannot be undone.
+Be sure to retain your original source file. JSMin is a one-way trip: Once
+done, it cannot be undone.
 
-Do not put raw control characters inside a quoted string. That is an extremely
-bad practice. Use \x<i>hh</i> notation instead. JSMin will replace control
-characters with spaces or linefeeds.
+Do not put raw control characters inside a quoted string. That is an
+extremely bad practice. Use `\x<i>hh</i>` notation instead. JSMin will
+replace control characters with spaces or linefeeds.
 
-Use parens with confusing sequences of + or -. For example, minification changes
+Use parens with confusing sequences of `+` or `-`. For example, minification
+changes
 
     a + ++b
 
