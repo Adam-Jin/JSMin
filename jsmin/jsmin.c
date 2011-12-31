@@ -33,16 +33,20 @@ struct Jsmin_ {
 	int a;
 	int b;
 	int lookahead;
+	JsminStream *in;
+	JsminStream *out;
 };
 
 Jsmin *
-jsmin_create(void)
+jsmin_create(JsminStream *in, JsminStream *out)
 {
 	Jsmin *self = calloc(1, sizeof(*self));
 	if (!self) {
 		return NULL;
 	}
 	self->lookahead = EOF;
+	self->in = in;
+	self->out = out;
 	return self;
 }
 
@@ -91,7 +95,7 @@ jsmin_get(Jsmin *self)
 	int c = self->lookahead;
 	self->lookahead = EOF;
 	if (c == EOF) {
-		c = getc(stdin);
+		c = jsmin_stream_getc(self->in);
 	}
 	if (c >= ' ' || c == '\n' || c == EOF) {
 		return c;
@@ -179,18 +183,18 @@ jsmin_action(Jsmin *self, int d)
 {
 	switch (d) {
 	case 1:
-		putc(self->a, stdout);
+		jsmin_stream_putc(self->out, self->a);
 	case 2:
 		self->a = self->b;
 		if (self->a == '\'' || self->a == '"' || self->a == '`') {
 			while (1) {
-				putc(self->a, stdout);
+				jsmin_stream_putc(self->out, self->a);
 				self->a = jsmin_get(self);
 				if (self->a == self->b) {
 					break;
 				}
 				if (self->a == '\\') {
-					putc(self->a, stdout);
+					jsmin_stream_putc(self->out, self->a);
 					self->a = jsmin_get(self);
 				}
 				if (self->a == EOF) {
@@ -209,19 +213,19 @@ jsmin_action(Jsmin *self, int d)
 				    || self->a == '}' || self->a == ';'
 				    || self->a == '\n'))
 		{
-			putc(self->a, stdout);
-			putc(self->b, stdout);
+			jsmin_stream_putc(self->out, self->a);
+			jsmin_stream_putc(self->out, self->b);
 			while (1) {
 				self->a = jsmin_get(self);
 				if (self->a == '[') {
 					while (1) {
-						putc(self->a, stdout);
+						jsmin_stream_putc(self->out, self->a);
 						self->a = jsmin_get(self);
 						if (self->a == ']') {
 							break;
 						}
 						if (self->a == '\\') {
-							putc(self->a, stdout);
+							jsmin_stream_putc(self->out, self->a);
 							self->a = jsmin_get(self);
 						}
 						if (self->a == EOF) {
@@ -232,14 +236,14 @@ jsmin_action(Jsmin *self, int d)
 				} else if (self->a == '/') {
 					break;
 				} else if (self->a =='\\') {
-					putc(self->a, stdout);
+					jsmin_stream_putc(self->out, self->a);
 					self->a = jsmin_get(self);
 				}
 				if (self->a == EOF) {
 					fprintf(stderr, "Error: JSMIN unterminated Regular Expression literal.\n");
 					exit(1);
 				}
-				putc(self->a, stdout);
+				jsmin_stream_putc(self->out, self->a);
 			}
 			self->b = jsmin_next(self);
 		}

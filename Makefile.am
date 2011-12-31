@@ -6,4 +6,4 @@ ACLOCAL_AMFLAGS = -I m4
 
 # install pkg-config scripts
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libjsmin.pc
+pkgconfig_DATA = jsmin.pc

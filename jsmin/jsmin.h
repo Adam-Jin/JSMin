@@ -27,6 +27,7 @@
 #define JSMIN_H
 
 #include <jsmin/macros.h>
+#include <jsmin/stream.h>
 
 JSMIN_BEGIN_DECLS
 
@@ -38,7 +39,7 @@ typedef struct Jsmin_ Jsmin;
  * \return A new Jsmin object or NULL if an error occurred.
  */
 JSMIN_PUBLIC Jsmin *
-jsmin_create(void)
+jsmin_create(JsminStream *in, JsminStream *out)
 	JSMIN_WARN_UNUSED_RESULT;
 
 /**

@@ -21,7 +21,7 @@ AC_INIT([JSMin], [jsmin_major_version.jsmin_minor_version.jsmin_micro_version],
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.9 foreign -Wno-portability nostdinc])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AC_CONFIG_SRCDIR([jsmin/jsmin.c])
+AC_CONFIG_SRCDIR([jsmin/jsmin.h])
 
 # Initialize Libtool
 LT_PREREQ([2.2])
@@ -49,7 +49,7 @@ AC_SUBST([LT_AGE])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
 	jsmin/Makefile
-	libjsmin.pc
+	jsmin.pc
 	Makefile
 ])
 AC_OUTPUT

@@ -25,6 +25,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <getopt.h>
 #include "jsmin/jsmin.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,16 +41,31 @@
 int
 main(int argc, char **argv)
 {
-	int i;
-	Jsmin *jsmin;
-	for (i = 1; i < argc; ++i) {
-		fprintf(stdout, "// %s\n", argv[i]);
+	Jsmin *jsmin = NULL;
+	int i, status = EXIT_SUCCESS;
+	JsminStream *in = NULL, *out = NULL;
+	in = jsmin_file_stream_create(stdin);
+	if (!in) {
+		goto error;
 	}
-	jsmin = jsmin_create();
+	out = jsmin_file_stream_create(stdout);
+	if (!out) {
+		goto error;
+	}
+	for (i = 1; i < argc; ++i) {
+		jsmin_stream_printf(out, "// %s\n", argv[i]);
+	}
+	jsmin = jsmin_create(in, out);
 	if (!jsmin) {
 		return EXIT_FAILURE;
 	}
 	jsmin_minify(jsmin);
+exit:
+	jsmin_stream_destroy(in);
+	jsmin_stream_destroy(out);
 	jsmin_destroy(jsmin);
-	return EXIT_SUCCESS;
+	return status;
+error:
+	status = EXIT_FAILURE;
+	goto exit;
 }

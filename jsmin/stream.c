@@ -32,8 +32,9 @@ struct JsminStream_ {
 
 struct JsminStreamClass {
 	void (*destroy)(void *self);
-	int (*fgetc)(void *self);
-	int (*fputc)(void *self, int c);
+	int (*getc_)(void *self);
+	int (*putc_)(void *self, int c);
+	int (*vprintf)(void *self, const char *format, va_list ap);
 };
 
 void
@@ -50,13 +51,24 @@ jsmin_stream_destroy(JsminStream *self)
 int
 jsmin_stream_getc(JsminStream *self)
 {
-	return self->klass->fgetc(self);
+	return self->klass->getc_(self);
 }
 
 int
 jsmin_stream_putc(JsminStream *self, int c)
 {
-	return self->klass->fputc(self, c);
+	return self->klass->putc_(self, c);
+}
+
+int
+jsmin_stream_printf(JsminStream *self, const char *format, ...)
+{
+	int result;
+	va_list ap;
+	va_start(ap, format);
+	result = self->klass->vprintf(self, format, ap);
+	va_end(ap);
+	return result;
 }
 
 struct JsminFileStream {
@@ -78,10 +90,18 @@ jsmin_file_stream_putc(void *base, int c)
 	return fputc(c, self->file);
 }
 
+static int
+jsmin_file_stream_vprintf(void *base, const char *format, va_list ap)
+{
+	struct JsminFileStream *self = (struct JsminFileStream *)base;
+	return vfprintf(self->file, format, ap);
+}
+
 static struct JsminStreamClass JsminFileStreamClass = {
 	NULL,
 	jsmin_file_stream_getc,
-	jsmin_file_stream_putc
+	jsmin_file_stream_putc,
+	jsmin_file_stream_vprintf
 };
 
 JsminStream *
@@ -110,7 +130,8 @@ jsmin_filename_stream_destroy(void *base)
 static struct JsminStreamClass JsminFilenameStreamClass = {
 	jsmin_filename_stream_destroy,
 	jsmin_file_stream_getc,
-	jsmin_file_stream_putc
+	jsmin_file_stream_putc,
+	jsmin_file_stream_vprintf
 };
 
 JsminStream *

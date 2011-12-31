@@ -27,6 +27,7 @@
 #define JSMIN_STREAM_H
 
 #include <jsmin/macros.h>
+#include <stdarg.h>
 #include <stdio.h>
 
 JSMIN_BEGIN_DECLS
@@ -53,6 +54,9 @@ jsmin_stream_getc(JsminStream *self);
 
 JSMIN_PUBLIC int
 jsmin_stream_putc(JsminStream *self, int c);
+
+JSMIN_PUBLIC int
+jsmin_stream_printf(JsminStream *self, const char *format, ...);
 
 JSMIN_END_DECLS
 
