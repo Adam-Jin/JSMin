@@ -22,12 +22,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "jsmin/jsmin.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 /**
- * \brief Output command line arguments as comments and minify the input.
+ * \brief Minify input and output command line arguments as comments.
  *
  * \param [in] argc The argument count
  * \param [in] argv The argument vector

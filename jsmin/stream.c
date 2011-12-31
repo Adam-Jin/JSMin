@@ -130,3 +130,26 @@ error:
 	free(self);
 	return NULL;
 }
+
+struct JsminMemoryStream {
+	struct JsminFilenameStream filename_stream;
+};
+
+JsminStream *
+jsmin_memory_stream_create(char *buf, size_t length, const char *mode)
+{
+	struct JsminMemoryStream *self = calloc(1, sizeof(*self));
+	if (!self) {
+		return NULL;
+	}
+	self->filename_stream.file_stream.stream.klass =
+		&JsminFilenameStreamClass;
+	self->filename_stream.file_stream.file = fmemopen(buf, length, mode);
+	if (!self->filename_stream.file_stream.file) {
+		goto error;
+	}
+	return (JsminStream *)self;
+error:
+	free(self);
+	return NULL;
+}

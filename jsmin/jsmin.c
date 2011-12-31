@@ -22,6 +22,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "jsmin/jsmin.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -73,9 +76,10 @@ jsmin_isalnum(Jsmin *self, int c)
 }
 
 /**
- * \brief Return the next character from STDIN. Watch out for lookahead. If
- *        the character is a control character, translate it to a space or
- *        linefeed.
+ * \brief Return the next character from STDIN.
+ *
+ * Watch out for lookahead. If the character is a control character, translate
+ * it to a space or linefeed.
  *
  * \param [in] self A Jsmin object
  *
@@ -113,8 +117,9 @@ jsmin_peek(Jsmin *self)
 }
 
 /**
- * \brief Get the next character, excluding comments. This function is used
- *        to see if a '/' is followed by a '/' or '*'.
+ * \brief Get the next character, excluding comments.
+ *
+ * This function is used to see if a '/' is followed by a '/' or '*'.
  *
  * \param [in] self A Jsmin object.
  *
@@ -127,7 +132,7 @@ jsmin_next(Jsmin *self)
 	if  ('/' == c) {
 		switch (jsmin_peek(self)) {
 		case '/':
-			for (;;) {
+			while (1) {
 				c = jsmin_get(self);
 				if (c <= '\n') {
 					return c;
@@ -135,7 +140,7 @@ jsmin_next(Jsmin *self)
 			}
 		case '*':
 			jsmin_get(self);
-			for (;;) {
+			while (1) {
 				switch (jsmin_get(self)) {
 				case '*':
 					if (jsmin_peek(self) == '/') {
@@ -178,7 +183,7 @@ jsmin_action(Jsmin *self, int d)
 	case 2:
 		self->a = self->b;
 		if (self->a == '\'' || self->a == '"' || self->a == '`') {
-			for (;;) {
+			while (1) {
 				putc(self->a, stdout);
 				self->a = jsmin_get(self);
 				if (self->a == self->b) {
@@ -206,10 +211,10 @@ jsmin_action(Jsmin *self, int d)
 		{
 			putc(self->a, stdout);
 			putc(self->b, stdout);
-			for (;;) {
+			while (1) {
 				self->a = jsmin_get(self);
 				if (self->a == '[') {
-					for (;;) {
+					while (1) {
 						putc(self->a, stdout);
 						self->a = jsmin_get(self);
 						if (self->a == ']') {

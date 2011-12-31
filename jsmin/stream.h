@@ -42,7 +42,7 @@ jsmin_filename_stream_create(const char *filename, const char *mode)
 	JSMIN_WARN_UNUSED_RESULT;
 
 JSMIN_PUBLIC JsminStream *
-jsmin_memory_stream_create(void *buf, size_t size, const char *mode)
+jsmin_memory_stream_create(char *buf, size_t length, const char *mode)
 	JSMIN_WARN_UNUSED_RESULT;
 
 JSMIN_PUBLIC void
