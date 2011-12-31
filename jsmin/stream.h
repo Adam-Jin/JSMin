@@ -20,48 +20,40 @@
  */
 
 /**
- * \brief Minify JavaScript source code
+ * \brief Stream I/O
  */
 
-#ifndef JSMIN_H
-#define JSMIN_H
+#ifndef JSMIN_STREAM_H
+#define JSMIN_STREAM_H
 
 #include <jsmin/macros.h>
+#include <stdio.h>
 
 JSMIN_BEGIN_DECLS
 
-typedef struct Jsmin_ Jsmin;
+typedef struct JsminStream_ JsminStream;
 
-/**
- * \brief Create a new Jsmin object.
- *
- * \return A new Jsmin object or NULL if an error occurred.
- */
-JSMIN_PUBLIC Jsmin *
-jsmin_create(void)
+JSMIN_PUBLIC JsminStream *
+jsmin_file_stream_create(FILE *file)
 	JSMIN_WARN_UNUSED_RESULT;
 
-/**
- * \brief Free resources used by a Jsmin object.
- *
- * \param [in] self A Jsmin object
- */
-JSMIN_PUBLIC void
-jsmin_destroy(Jsmin *self);
+JSMIN_PUBLIC JsminStream *
+jsmin_filename_stream_create(const char *filename, const char *mode)
+	JSMIN_WARN_UNUSED_RESULT;
 
-/**
- * \brief Minify input from STDIN.
- *
- * Copy the input to the output, deleting the characters which are
- * insignificant to JavaScript. Comments will be removed. Tabs will be
- * replaced with spaces. Carriage returns will be replaced with linefeeds.
- * Most spaces and linefeeds will be removed.
- *
- * \param [in] self A Jsmin object.
- */
+JSMIN_PUBLIC JsminStream *
+jsmin_memory_stream_create(void *buf, size_t size, const char *mode)
+	JSMIN_WARN_UNUSED_RESULT;
+
 JSMIN_PUBLIC void
-jsmin_minify(Jsmin *self);
+jsmin_stream_destroy(JsminStream *self);
+
+JSMIN_PUBLIC int
+jsmin_stream_getc(JsminStream *self);
+
+JSMIN_PUBLIC int
+jsmin_stream_putc(JsminStream *self, int c);
 
 JSMIN_END_DECLS
 
-#endif /* JSMIN_H */
+#endif /* JSMIN_STREAM_H */

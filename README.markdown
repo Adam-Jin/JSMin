@@ -1,8 +1,6 @@
 JSMIN, The JavaScript Minifier
 ==============================
 
-Douglas Crockford <douglas@crockford.com>
-
 JSMin is a filter which removes comments and unnecessary whitespace from
 JavaScript files. It typically reduces filesize by half, resulting in faster
 downloads. It also encourages a more expressive programming style because it
@@ -147,13 +145,7 @@ Unterminated regular expression.
 
 It ignores all other errors that may be present in your source program.
 
-Get Minified
-------------
-
-You can get a zip file containing an MS-DOS.exe file, or you can get the
-C source code and build it yourself.
-
-Copyright 2001 Douglas Crockford. All Rights Reserved Wrrrldwide.
+Copyright 2001 Douglas Crockford <douglas@crockford.com>
 
 <!--
 vim: et:sw=4:ts=4:

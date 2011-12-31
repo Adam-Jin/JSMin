@@ -1,4 +1,5 @@
-/* Copyright 2011 Michael Steinert
+/* Copyright 2002 Douglas Crockford <http://www.crockford.com>
+ * Copyright 2011 Michael Steinert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -10,6 +11,8 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
+ * The Software shall be used for Good, not Evil.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,49 +22,31 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * \brief Minify JavaScript source code
- */
-
-#ifndef JSMIN_H
-#define JSMIN_H
-
-#include <jsmin/macros.h>
-
-JSMIN_BEGIN_DECLS
-
-typedef struct Jsmin_ Jsmin;
+#include "jsmin/jsmin.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
- * \brief Create a new Jsmin object.
+ * \brief Output command line arguments as comments and minify the input.
  *
- * \return A new Jsmin object or NULL if an error occurred.
+ * \param [in] argc The argument count
+ * \param [in] argv The argument vector
+ *
+ * \return The program returns EXIT_SUCCESS or EXIT_FAILURE.
  */
-JSMIN_PUBLIC Jsmin *
-jsmin_create(void)
-	JSMIN_WARN_UNUSED_RESULT;
-
-/**
- * \brief Free resources used by a Jsmin object.
- *
- * \param [in] self A Jsmin object
- */
-JSMIN_PUBLIC void
-jsmin_destroy(Jsmin *self);
-
-/**
- * \brief Minify input from STDIN.
- *
- * Copy the input to the output, deleting the characters which are
- * insignificant to JavaScript. Comments will be removed. Tabs will be
- * replaced with spaces. Carriage returns will be replaced with linefeeds.
- * Most spaces and linefeeds will be removed.
- *
- * \param [in] self A Jsmin object.
- */
-JSMIN_PUBLIC void
-jsmin_minify(Jsmin *self);
-
-JSMIN_END_DECLS
-
-#endif /* JSMIN_H */
+int
+main(int argc, char **argv)
+{
+	int i;
+	Jsmin *jsmin;
+	for (i = 1; i < argc; ++i) {
+		fprintf(stdout, "// %s\n", argv[i]);
+	}
+	jsmin = jsmin_create();
+	if (!jsmin) {
+		return EXIT_FAILURE;
+	}
+	jsmin_minify(jsmin);
+	jsmin_destroy(jsmin);
+	return EXIT_SUCCESS;
+}
