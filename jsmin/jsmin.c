@@ -154,7 +154,7 @@ jsmin_next(Jsmin *self)
 					break;
 				case EOF:
 					fprintf(stderr, "Error: JSMIN Unterminated comment.\n");
-					exit(1);
+					exit(EXIT_FAILURE);
 				}
 			}
 		default:
@@ -199,7 +199,7 @@ jsmin_action(Jsmin *self, int d)
 				}
 				if (self->a == EOF) {
 					fprintf(stderr, "Error: JSMIN unterminated string literal.");
-					exit(1);
+					exit(EXIT_FAILURE);
 				}
 			}
 		}
@@ -230,7 +230,7 @@ jsmin_action(Jsmin *self, int d)
 						}
 						if (self->a == EOF) {
 							fprintf(stderr, "Error: JSMIN unterminated set in Regular Expression literal.\n");
-							exit(1);
+							exit(EXIT_FAILURE);
 						}
 					}
 				} else if (self->a == '/') {
@@ -241,7 +241,7 @@ jsmin_action(Jsmin *self, int d)
 				}
 				if (self->a == EOF) {
 					fprintf(stderr, "Error: JSMIN unterminated Regular Expression literal.\n");
-					exit(1);
+					exit(EXIT_FAILURE);
 				}
 				jsmin_stream_putc(self->out, self->a);
 			}
